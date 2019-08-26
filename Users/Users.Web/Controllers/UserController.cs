@@ -14,13 +14,12 @@ namespace Users.Web.Controllers
             this.usersService = usersService;
         }
 
-        // GET: User
         public ActionResult Index()
         {
             var users = new UsersViewModel
             {
                 Users = this.usersService.RetrieveUsers().ToList(),
-                UserProjects = this.usersService.RetrieveAllUserProjects()
+                UserProjects = this.usersService.RetrieveAllUserProjects(string.Empty)
             };
 
             return View(users);
@@ -31,11 +30,11 @@ namespace Users.Web.Controllers
         {
             if (!string.IsNullOrWhiteSpace(userId))
             {
-                var userProjects = this.usersService.RetrieveAllUserProjects().Where(user => user.UserId == userId);
-                return Json(userProjects, JsonRequestBehavior.AllowGet);
+                var userProjects = this.usersService.RetrieveAllUserProjects(userId);
+                return PartialView("_Projects", userProjects);
             }
 
-            return Json(null, JsonRequestBehavior.AllowGet);
+            return null;
         }
     }
 }

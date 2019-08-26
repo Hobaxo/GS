@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Users.Data;
 using Users.Repositories;
 using Users.Web.ViewModels;
+using Utilities;
 
 namespace Users.Services
 {
     public class UsersService : IUsersService
     {
         private readonly IUsersRepository usersRepository;
-
+        
         public UsersService(IUsersRepository usersRepository)
         {
             this.usersRepository = usersRepository;
@@ -23,23 +22,16 @@ namespace Users.Services
             return this.usersRepository.RetrieveAllUsers();
         }
 
-        public IEnumerable<UserProjectsViewModel> RetrieveAllUserProjects()
+        public IEnumerable<UserProjectsViewModel> RetrieveAllUserProjects(string userId)
         {
-            var userProjects = this.usersRepository.RetrieveAllUserProjects();
+            var userProjects = string.IsNullOrEmpty(userId) ? this.usersRepository.RetrieveAllUserProjects() : this.usersRepository.RetrieveUserProjects(userId);
             var projects = this.usersRepository.RetrieveAllProjects();
-            var userProjectsViewModels =  Testa(userProjects, projects);
-
+            var userProjectsViewModels =  CreateUserProjectObjects(userProjects, projects);
             
             return userProjectsViewModels;
         }
 
-        public IEnumerable<SelectListItem> RetrieveAllUserProjects(string userId)
-        {
-            //var projects = this.usersRepository.RetrieveAllUserProjects(userId);
-            return null;
-        }
-
-        private List<UserProjectsViewModel> Testa(List<UserProject> userProjects, List<Project> projects)
+        private List<UserProjectsViewModel> CreateUserProjectObjects(List<UserProject> userProjects, List<Project> projects)
         {
             List<UserProjectsViewModel> presentationUserProjects = new List<UserProjectsViewModel>();
 
@@ -55,7 +47,7 @@ namespace Users.Services
                             UserId = project.UserId.ToString(),
                             ProjectId = project.ProjectId.ToString(),
                             StartDate = matchingProject.StartDate,
-                            TimeToStart = CalculateTimeToStart(matchingProject.StartDate, project.AssignedDate),
+                            TimeToStart = Calculations.CalculateTimeToStart(matchingProject.StartDate, project.AssignedDate),
                             EndDate = matchingProject.EndDate,
                             Credits = matchingProject.Credits.ToString(),
                             Status = project.IsActive ? "Active" : "Inactive"
@@ -64,13 +56,6 @@ namespace Users.Services
             }
 
             return presentationUserProjects;
-        }
-
-        private static string CalculateTimeToStart(DateTime startDate, DateTime assignedDate)
-        {
-            var days = (startDate - assignedDate).TotalDays;
-
-            return days >= 0 ? days.ToString(CultureInfo.InvariantCulture) : "Started";
         }
     }
 }

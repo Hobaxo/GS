@@ -11,5 +11,7 @@ namespace Users.Repositories
         List<Project> RetrieveAllProjects();
 
         List<UserProject> RetrieveAllUserProjects();
+
+        List<UserProject> RetrieveUserProjects(string userId);
     }
 }

@@ -54,5 +54,18 @@ namespace Users.Repositories
                 return userProjects.ToList();
             }
         }
+
+        public List<UserProject> RetrieveUserProjects(string userId)
+        {
+            using (var context = new UsersDbContext())
+            {
+                var userProjects = from userProject in context.UserProjects
+                    where userProject.UserId.ToString() == userId
+                    orderby userProject.UserId
+                    select userProject;
+
+                return userProjects.ToList();
+            }
+        }
     }
 }

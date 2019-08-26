@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title = "Mockup";
-    WebGrid projects = new WebGrid(Model.UserProjects, canSort: false);
 }
 
 <div class="container">
@@ -13,67 +12,33 @@
         </div>
     </div>
     <br />
-    <div class="row mx-auto">
-        @if (Model.UserProjects.Any())
-        {
-            @projects.GetHtml(
-                columns: projects.Columns(
-                    projects.Column("ProjectId", "Product ID"),
-                    projects.Column("StartDate", "Start Date"),
-                    projects.Column("TimeToStart", "Time To Start"),
-                    projects.Column("EndDate", "End Date"),
-                    projects.Column("Credits", "Credits"),
-                    projects.Column("Status", "Status")
-                    ),
-                tableStyle: "mx-auto webgrid-table",
-                headerStyle: "webgrid-header",
-                footerStyle: "webgrid-footer"
-                )
-        }
+    <div class="row mx-auto" id="Projects">
+        @Html.Partial("_Projects", Model.UserProjects)
     </div>
 </div>
 
-<script type="text/css">
-    .webgrid-table {
-    font - family: "Trebuchet MS", Arial, Helvetica, sans - serif;
-    font - size: 1.2e m;
-    width: 100 % ;
-    display: table;
-    border - collapse: separate;
-    border: solid 1 px blue;
-    background - color: white;
-    }
-    .webgrid-table td, th {
-    border: 1 px solid blue;
-    padding: 3 px 7 px 2 px;
-    }
-    .webgrid-header {
-    background - color: yellow;
-    color: red;
-    padding - bottom: 4 px;
-    padding - top: 5 px;
-    text - align: left;
-    }
-</script>
-
 @section Scripts
 {
-    
-            <script type="text/javascript">
-            function retrieveUserProjects() {
-                var userId = $('#Users').val();
+    <script type="text/javascript">
+        function retrieveUserProjects() {
+            var userId = $('#Users').val();
+            var urlPath = '/User/RetrieveUserProjects/';
+            if (userId) {
                 $.ajax({
                     type: 'GET',
-                    dataType: 'json',
                     cache: false,
-                    url: '/User/RetrieveUserProjects',
                     data: { userId: userId },
-                    success: function(data) {
+                    url: urlPath,
+                    success: function(result) {
+                        $('#Projects').html(result);
                     },
                     error: function(xhr) {
-                        debugger;
+                        alert('Error retrieving the data!');
+                        console.log(xhr);
                     }
                 });
-            }
+            } else
+                location.reload();
+        }
     </script>
 }

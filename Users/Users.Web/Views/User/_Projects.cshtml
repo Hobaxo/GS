@@ -1,0 +1,22 @@
+﻿@model IEnumerable<Users.Web.ViewModels.UserProjectsViewModel>
+
+@{
+    WebGrid projects = new WebGrid(Model, canSort: false, ajaxUpdateContainerId: "Projects");
+}
+
+@if (Model.Any())
+{
+    @projects.GetHtml(
+        columns: projects.Columns(
+            projects.Column("ProjectId", "Project ID", style: "Column1Class"),
+            projects.Column("StartDate", "Start Date"),
+            projects.Column("TimeToStart", "Time To Start"),
+            projects.Column("EndDate", "End Date"),
+            projects.Column("Credits", "Credits"),
+            projects.Column("Status", "Status")
+            ),
+        tableStyle: "webgrid-table",
+        headerStyle: "webgrid-header",
+        footerStyle: "webgrid-footer"
+        )
+}

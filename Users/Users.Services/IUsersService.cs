@@ -8,8 +8,6 @@ namespace Users.Services
     {
         IEnumerable<SelectListItem> RetrieveUsers();
 
-        IEnumerable<UserProjectsViewModel> RetrieveAllUserProjects();
-
-        IEnumerable<SelectListItem> RetrieveAllUserProjects(string userId);
+        IEnumerable<UserProjectsViewModel> RetrieveAllUserProjects(string userId);
     }
 }

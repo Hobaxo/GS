@@ -60,9 +60,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="Users.Web">
-      <HintPath>..\Users.Web\bin\Users.Web.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IUsersService.cs" />
@@ -77,6 +74,10 @@
     <ProjectReference Include="..\Users.Repositories\Users.Repositories.csproj">
       <Project>{e93228c3-000c-431b-9110-e904af7a949d}</Project>
       <Name>Users.Repositories</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Users.Utilities\Users.Utilities.csproj">
+      <Project>{A10E27E2-2AB8-4056-9429-B50EEB20A9A6}</Project>
+      <Name>Users.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
